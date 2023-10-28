@@ -151,5 +151,12 @@
 .mission{
     background-size: cover;
     background-repeat: no-repeat;
+    position: relative;
     background-position: center;
+}
+.points{
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    color: white;
 }
