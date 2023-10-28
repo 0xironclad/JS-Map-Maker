@@ -1,24 +1,155 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Sometype Mono", monospace;
+  box-sizing: border-box;
 }
-#map{
-    display: flex;
-    width: 400px;
-    height: 400px;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin:20% auto;
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid red;
+  display: flex;
+  /* flex-wrap: wrap; */
 }
-.row{
-    flex: 1;
-    display: flex;
-    margin: 1px 0;
+
+/* ?map and div2 */
+
+#map {
+  display: flex;
+  width: 400px;
+  height: 400px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 20% 10px;
 }
-.cell{
-    flex: 1;
-    background: #efe2b3;
-    border-radius: 2px;
-    margin: 0 1px;
+
+.div2 {
+  height: inherit;
+  width: calc(100vw - 410px);
+  border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.scores,
+.missions,
+.elements {
+  border: 1px solid green;
+  height: 25%;
+  padding-left: 15px;
+}
+.elements {
+  display: flex;
+  height: min-content;
+  padding-top: 5px;
+  justify-content: start;
+}
+.missions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.operations,
+.shape {
+  height: 100%;
+  position: relative;
+}
+.operations {
+  width: 40%;
+}
+.shape {
+  width: 60%;
+}
+.buttons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.buttons button {
+  padding: 4px 10px;
+}
+.row {
+  flex: 1;
+  display: flex;
+  margin: 1px 0;
+}
+.cell {
+  flex: 1;
+  background: #efe2b3;
+  border-radius: 2px;
+  margin: 0 1px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* *Wrapper */
+.wrapper {
+  width: calc(1250px / 11);
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(188, 204, 200);
+  border-radius: 4px;
+}
+.cell-shape {
+  width: calc(400px / 11);
+  height: calc(400px / 11);
+  margin: 0 1px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.randomShape {
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+}
+.fa-clock {
+  font-size: 13px;
+}
+
+/* *Missions wrapper */
+.missions-wrapper {
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  border: 1px solid orangered;
+}
+
+.missions-wrapper .row {
+  display: flex;
+  height: 50%;
+  width: 100%;
+}
+.missions-wrapper .mission {
+  margin: 4px;
+  flex: 1;
+  border-radius: 4px;
+}
+
+/* *Basic Missions */
+#edge-forest{
+    background-image: url('./assets/missions_eng/EdgeOfForest.png');
+}
+#sleepy-valley{
+    background-image: url('./assets/missions_eng/SleepyValley.png');
+}
+#potatoes{
+    background-image: url("./assets/missions_eng/WateringPotatoes.png");
+}
+#borderlands{
+    background-image: url("./assets/missions_eng/BorderLands.png");
+}
+.mission{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
