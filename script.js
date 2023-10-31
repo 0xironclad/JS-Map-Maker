@@ -221,28 +221,90 @@ const cells = document.querySelectorAll(".cell-shape");
 const time = document.querySelector(".time");
 time.innerHTML = randomElement.time;
 
-for (let row = 0; row < shape.length; row++) {
-  for (let col = 0; col < shape[row].length; col++) {
-    if (shape[row][col] === 1) {
-      if (randomElement.type === "water") {
-        cells[
-          row * 3 + col
-        ].style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
-      } else if (randomElement.type === "forest") {
-        cells[
-          row * 3 + col
-        ].style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
-      } else if (randomElement.type === "farm") {
-        cells[
-          row * 3 + col
-        ].style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
-      } else if (randomElement.type === "town") {
-        cells[
-          row * 3 + col
-        ].style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
+function createElement(arr) {
+  for (let row = 0; row < arr.length; row++) {
+    for (let col = 0; col < arr[row].length; col++) {
+      if (arr[row][col] === 1) {
+        if (randomElement.type === "water") {
+          cells[
+            row * 3 + col
+          ].style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
+        } else if (randomElement.type === "forest") {
+          cells[
+            row * 3 + col
+          ].style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
+        } else if (randomElement.type === "farm") {
+          cells[
+            row * 3 + col
+          ].style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
+        } else if (randomElement.type === "town") {
+          cells[
+            row * 3 + col
+          ].style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
+        }
       }
-    } else {
-      cells[row * 3 + col].style.backgroundColor = "RGB(188, 204, 200)";
     }
   }
 }
+
+createElement(shape);
+console.log(randomElement.shape);
+
+
+
+
+function rotateShape() {
+  const shape = randomElement.shape;
+  const size = shape.length;
+  const rotatedShape = new Array(size).fill(0).map(() => new Array(size).fill(0));
+
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      rotatedShape[i][j] = shape[size - 1 - j][i];
+    }
+  }
+  randomElement.shape = rotatedShape;
+}
+
+function flipShape(){
+  let shape = randomElement.shape;
+  let flippedShaped = shape.map((row) => row.reverse());
+  randomElement.shape = flippedShaped;
+}
+
+function clearCells(){
+  cells.forEach((cell) => {
+    cell.style.backgroundImage = "";
+  });
+}
+
+
+let rotateBtn = document.querySelector(".rotate");
+let flipBtn = document.querySelector(".flip");
+rotateBtn.addEventListener("click", () => {
+  clearCells();
+  rotateShape();
+  createElement(randomElement.shape);
+});
+
+
+flipBtn.addEventListener("click", () => {
+  clearCells();
+  flipShape();
+  createElement(randomElement.shape);
+});
+
+
+
+
+
+
+
+
+
+
+// *Points
+const points = document.querySelectorAll(".points");
+points.forEach((element) => {
+  element.innerHTML = Math.floor(Math.random() * 10);
+});

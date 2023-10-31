@@ -26,11 +26,16 @@
 
 .div2 {
   height: inherit;
-  width: calc(100vw - 410px);
+  /* width: calc(100vw - 410px); */
   border: 1px solid blue;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+@media screen and (min-height: 500px)  {
+    .div2{
+        width: 50vw;
+    }
 }
 .scores,
 .missions,
@@ -120,8 +125,7 @@
   height: 85%;
   display: flex;
   flex-direction: column;
-  width: 85%;
-  border: 1px solid orangered;
+  width: 95%;
 }
 
 .missions-wrapper .row {
@@ -136,27 +140,88 @@
 }
 
 /* *Basic Missions */
-#edge-forest{
-    background-image: url('./assets/missions_eng/EdgeOfForest.png');
+#edge-forest {
+  background-image: url("./assets/missions_eng/EdgeOfForest.png");
 }
-#sleepy-valley{
-    background-image: url('./assets/missions_eng/SleepyValley.png');
+#sleepy-valley {
+  background-image: url("./assets/missions_eng/SleepyValley.png");
 }
-#potatoes{
-    background-image: url("./assets/missions_eng/WateringPotatoes.png");
+#potatoes {
+  background-image: url("./assets/missions_eng/WateringPotatoes.png");
 }
-#borderlands{
-    background-image: url("./assets/missions_eng/BorderLands.png");
+#borderlands {
+  background-image: url("./assets/missions_eng/BorderLands.png");
 }
-.mission{
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: relative;
-    background-position: center;
+.mission {
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  background-position: center;
 }
-.points{
-    position: absolute;
-    bottom: 0;
-    right: 50%;
-    color: white;
+.points {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  color: white;
+}
+
+/* *scores div */
+.scores {
+  display: flex;
+  flex-direction: column;
+}
+.row1 {
+  height: fit-content;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.row1 > * {
+  /* flex: 1; */
+  background: gold;
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+}
+
+.spring {
+  background: rgb(105, 190, 108);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.summer {
+  background: rgb(254, 232, 116);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.autumn {
+  background-color: rgb(254, 232, 116);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.water {
+  background-color: rgb(89, 210, 236);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.row2{
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.row2 p{
+    text-align: center;
+}
+hr{
+    width: 80%;
 }
