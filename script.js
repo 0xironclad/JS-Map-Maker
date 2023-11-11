@@ -263,12 +263,14 @@ function rotateShape() {
     }
   }
   randomElement.shape = rotatedShape;
+  randomElement.rotation = (randomElement.rotation + 90) % 360;
 }
 
 function flipShape() {
   let shape = randomElement.shape;
   let flippedShaped = shape.map((row) => row.reverse());
   randomElement.shape = flippedShaped;
+  randomElement.mirrored = !randomElement.mirrored;
 }
 
 function clearCells() {
@@ -298,53 +300,102 @@ points.forEach((element) => {
   element.innerHTML = Math.floor(Math.random() * 10);
 });
 
-
-
-// *Dragging and dropping shapes on the map
-
 let mapCells = document.querySelectorAll(".cell");
 let shapeContainer = document.querySelector(".randomShape");
 
-// Assuming shapeContainer is the container of the shape
-shapeContainer.setAttribute("draggable", "true");
+function getShapeImageUrl(element) {
+  if (element.type === "water") {
+    return `url("./assets/tiles/water_tile.png")`;
+  } else if (element.type === "forest") {
+    return `url("./assets/tiles/forest_tile.png")`;
+  } else if (element.type === "farm") {
+    return `url("./assets/tiles/plains_tile.png")`;
+  } else if (element.type === "town") {
+    return `url("./assets/tiles/village_tile.png")`;
+  }
+}
 
-shapeContainer.addEventListener("dragstart", (event) => {
-  event.dataTransfer.setData("text/plain", JSON.stringify(randomElement));
-});
+function getCellCoordinates(cell) {
+  const colIndex = Array.from(cell.parentElement.children).indexOf(cell);
+  const rowIndex = Array.from(
+    cell.parentElement.parentElement.children
+  ).indexOf(cell.parentElement);
+  return { row: rowIndex, col: colIndex };
+}
 
 mapCells.forEach((cell) => {
-  cell.addEventListener("dragover", (event) => {
-    event.preventDefault(); // This is necessary to allow a drop operation
+  cell.addEventListener("click", () => {
+    let coordinates = getCellCoordinates(cell);
+    createElementOnMap(randomElement.shape, coordinates.row, coordinates.col);
   });
+});
 
-  cell.addEventListener("drop", (event) => {
-    event.preventDefault();
-    const randomElementData = JSON.parse(
-      event.dataTransfer.getData("text/plain")
-    );
-    const shape = randomElementData.shape;
-    const cellSize = 50; // Replace with the actual size of a cell
-    const dropRow = Math.floor(event.clientY / cellSize);
-    const dropCol = Math.floor(event.clientX / cellSize);
+function createElementOnMap(arr, clickedRow, clickedCol) {
+  let isOccupied = false;
+  let isOverHang = false;
 
-    // Create the shape on the map based on the shape property of the randomElement object
-    for (let row = 0; row < shape.length; row++) {
-      for (let col = 0; col < shape[row].length; col++) {
-        if (shape[row][col] === 1) {
-          const mapRow = dropRow + row;
-          const mapCol = dropCol + col;
-    
-          if (randomElementData.type === "water") {
-            mapCells[mapRow * 3 + mapCol].style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
-          } else if (randomElementData.type === "forest") {
-            mapCells[mapRow * 3 + mapCol].style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
-          } else if (randomElementData.type === "farm") {
-            mapCells[mapRow * 3 + mapCol].style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
-          } else if (randomElementData.type === "town") {
-            mapCells[mapRow * 3 + mapCol].style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
+  for (let row = 0; row < arr.length; row++) {
+    for (let col = 0; col < arr[row].length; col++) {
+      if (arr[row][col] === 1) {
+        let mapRow = clickedRow + row;
+        let mapCol = clickedCol + col;
+
+        if (mapRow < 0 || mapRow >= rows || mapCol < 0 || mapCol >= cols) {
+          isOverHang = true;
+          break;
+        }
+
+        let cell = document.querySelector(
+          `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
+        );
+        if (cell.style.backgroundImage !== "") {
+          isOccupied = true;
+          break;
+        }
+      }
+    }
+  }
+  console.log(isOccupied);
+  if (!isOccupied && !isOverHang) {
+    for (let row = 0; row < arr.length; row++) {
+      for (let col = 0; col < arr[row].length; col++) {
+        if (arr[row][col] === 1) {
+          let mapRow = clickedRow + row;
+          let mapCol = clickedCol + col;
+
+          let cell = document.querySelector(
+            `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
+          );
+          if (randomElement.type === "water") {
+            cell.style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
+          } else if (randomElement.type === "forest") {
+            cell.style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
+          } else if (randomElement.type === "farm") {
+            cell.style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
+          } else if (randomElement.type === "town") {
+            cell.style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
           }
         }
       }
     }
-  });
-});
+  } else if(isOccupied) {
+    for (let row = 0; row < arr.length; row++) {
+      for (let col = 0; col < arr[row].length; col++) {
+        if (arr[row][col] === 1) {
+          let mapRow = clickedRow + row;
+          let mapCol = clickedCol + col;
+
+          let cell = document.querySelector(
+            `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
+          );
+          setTimeout(() => {
+            cell.style.border = "1px solid red";
+            setTimeout(() => {
+              cell.style.border = "";
+            }, 700);
+          }, 100);
+        }
+      }
+    }
+  }
+}
