@@ -215,9 +215,10 @@ const elements = [
   },
 ];
 
-const randomElement = elements[Math.floor(Math.random() * elements.length)];
+let randomElement = elements[Math.floor(Math.random() * elements.length)];
 const shape = randomElement.shape;
 const cells = document.querySelectorAll(".cell-shape");
+// console.log(cells)
 const time = document.querySelector(".time");
 time.innerHTML = randomElement.time;
 
@@ -242,13 +243,15 @@ function createElement(arr) {
             row * 3 + col
           ].style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
         }
+      } else {
+        cells[row * 3 + col].style.display = "inline";
       }
     }
   }
 }
 
 createElement(shape);
-console.log(randomElement.shape);
+// console.log(randomElement.shape);
 
 function rotateShape() {
   const shape = randomElement.shape;
@@ -293,12 +296,12 @@ flipBtn.addEventListener("click", () => {
   createElement(randomElement.shape);
 });
 
-// !RANDOM DATA. WILL REMOVE
-// *Points
-const points = document.querySelectorAll(".points");
-points.forEach((element) => {
-  element.innerHTML = Math.floor(Math.random() * 10);
-});
+
+// *MISSION POINTS
+
+
+
+
 
 let mapCells = document.querySelectorAll(".cell");
 let shapeContainer = document.querySelector(".randomShape");
@@ -327,12 +330,23 @@ mapCells.forEach((cell) => {
   cell.addEventListener("click", () => {
     let coordinates = getCellCoordinates(cell);
     createElementOnMap(randomElement.shape, coordinates.row, coordinates.col);
+    console.log(isAdjacentPoints);
   });
 });
 
+// !TIMER
+let timeUnits = 0;
+let isAdjacentPoints = 0;
+let threeForestPoints = 0; 
+
+document.querySelector('.edge-forest').innerHTML = isAdjacentPoints;
+document.querySelector('.three-forest').innerHTML = threeForestPoints;
 function createElementOnMap(arr, clickedRow, clickedCol) {
   let isOccupied = false;
   let isOverHang = false;
+
+  // Keep track of rows associated with the shape
+  let shapeRows = new Set();
 
   for (let row = 0; row < arr.length; row++) {
     for (let col = 0; col < arr[row].length; col++) {
@@ -352,10 +366,13 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
           isOccupied = true;
           break;
         }
+
+        // Add the row to the set
+        shapeRows.add(mapRow);
       }
     }
   }
-  console.log(isOccupied);
+
   if (!isOccupied && !isOverHang) {
     for (let row = 0; row < arr.length; row++) {
       for (let col = 0; col < arr[row].length; col++) {
@@ -370,6 +387,15 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
             cell.style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
           } else if (randomElement.type === "forest") {
             cell.style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
+            if (
+              mapRow === 0 ||
+              mapRow === rows - 1 ||
+              mapCol === 0 ||
+              mapCol === cols - 1
+            ) {
+              isAdjacentPoints += 1;
+              document.querySelector('.edge-forest').innerHTML = isAdjacentPoints;
+            }
           } else if (randomElement.type === "farm") {
             cell.style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
           } else if (randomElement.type === "town") {
@@ -378,7 +404,30 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
         }
       }
     }
-  } else if(isOccupied) {
+
+    timeUnits += randomElement.time;
+    randomElement = elements[Math.floor(Math.random() * elements.length)];
+    clearCells();
+    createElement(randomElement.shape);
+    let forestCount = 0;
+    console.log(shapeRows);
+    shapeRows.forEach((row) => {
+      if (checkRowFull(row)) {
+        for(let i = 0; i < cols; i++) {
+          let cell = document.querySelector(`.row:nth-child(${row + 1}) .cell:nth-child(${i + 1})`);
+          console.log(cell)
+          if(cell.style.backgroundImage === `url("./assets/tiles/forest_tile.png")`) {
+            forestCount++;
+          }
+        }
+        console.log(`Row ${row} is full!`);
+      }
+    });
+    if(forestCount === 3){
+      threeForestPoints += 4;
+      document.querySelector('.three-forest').innerHTML = threeForestPoints;
+    }
+  } else if (isOccupied) {
     for (let row = 0; row < arr.length; row++) {
       for (let col = 0; col < arr[row].length; col++) {
         if (arr[row][col] === 1) {
@@ -389,13 +438,50 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
             `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
           );
           setTimeout(() => {
-            cell.style.border = "1px solid red";
+            cell.style.outline = "1px solid red";
             setTimeout(() => {
-              cell.style.border = "";
+              cell.style.outline = "";
             }, 700);
           }, 100);
         }
       }
     }
   }
+}
+
+
+
+
+function checkIsAdjacent() {
+  let isAdjacent = false;
+  let forestCells = document.querySelectorAll(".cell");
+  forestCells.forEach((cell) => {
+    let coordinates = getCellCoordinates(cell);
+    let row = coordinates.row;
+    let col = coordinates.col;
+    if (
+      cell.style.backgroundImage === `url("./assets/tiles/forest_tile.png")`
+    ) {
+      if (row === 0 || row === 10 || col === 0 || col === 10) {
+        isAdjacent = true;
+      }
+    }
+  });
+  return isAdjacent;
+}
+
+// ?SLEEP VALLEY
+
+// check if row is full
+function selectRow(cell){
+  let row = cell.parentElement;
+  let cells = Array.from(row.children);
+  return cells;
+
+}
+console.log(selectRow(mapCells[0]));
+
+function checkRowFull(row) {
+  let cells = Array.from(document.querySelectorAll(`.row:nth-child(${row + 1}) .cell`));
+  return cells.every((cell) => cell.style.backgroundImage !== "");
 }
