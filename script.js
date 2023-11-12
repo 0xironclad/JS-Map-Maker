@@ -218,7 +218,6 @@ const elements = [
 let randomElement = elements[Math.floor(Math.random() * elements.length)];
 const shape = randomElement.shape;
 const cells = document.querySelectorAll(".cell-shape");
-// console.log(cells)
 const time = document.querySelector(".time");
 time.innerHTML = randomElement.time;
 
@@ -296,12 +295,7 @@ flipBtn.addEventListener("click", () => {
   createElement(randomElement.shape);
 });
 
-
 // *MISSION POINTS
-
-
-
-
 
 let mapCells = document.querySelectorAll(".cell");
 let shapeContainer = document.querySelector(".randomShape");
@@ -337,16 +331,19 @@ mapCells.forEach((cell) => {
 // !TIMER
 let timeUnits = 0;
 let isAdjacentPoints = 0;
-let threeForestPoints = 0; 
+let threeForestPoints = 0;
+let borderlandsPoints = 0;
 
-document.querySelector('.edge-forest').innerHTML = isAdjacentPoints;
-document.querySelector('.three-forest').innerHTML = threeForestPoints;
+document.querySelector(".edge-forest").innerHTML = isAdjacentPoints;
+document.querySelector(".three-forest").innerHTML = threeForestPoints;
+document.querySelector(".borderlands").innerHTML = borderlandsPoints;
 function createElementOnMap(arr, clickedRow, clickedCol) {
   let isOccupied = false;
   let isOverHang = false;
 
   // Keep track of rows associated with the shape
   let shapeRows = new Set();
+  let shapeCols = new Set();
 
   for (let row = 0; row < arr.length; row++) {
     for (let col = 0; col < arr[row].length; col++) {
@@ -369,6 +366,7 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
 
         // Add the row to the set
         shapeRows.add(mapRow);
+        shapeCols.add(mapCol);
       }
     }
   }
@@ -394,7 +392,8 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
               mapCol === cols - 1
             ) {
               isAdjacentPoints += 1;
-              document.querySelector('.edge-forest').innerHTML = isAdjacentPoints;
+              document.querySelector(".edge-forest").innerHTML =
+                isAdjacentPoints;
             }
           } else if (randomElement.type === "farm") {
             cell.style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
@@ -409,23 +408,45 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
     randomElement = elements[Math.floor(Math.random() * elements.length)];
     clearCells();
     createElement(randomElement.shape);
+
     let forestCount = 0;
-    console.log(shapeRows);
+    
+    // We check if each row is full, if it is, we add 6 points. Also we count the forest tiles in the row
     shapeRows.forEach((row) => {
       if (checkRowFull(row)) {
-        for(let i = 0; i < cols; i++) {
-          let cell = document.querySelector(`.row:nth-child(${row + 1}) .cell:nth-child(${i + 1})`);
-          console.log(cell)
-          if(cell.style.backgroundImage === `url("./assets/tiles/forest_tile.png")`) {
+        for (let i = 0; i < cols; i++) {
+          let cell = document.querySelector(
+            `.row:nth-child(${row + 1}) .cell:nth-child(${i + 1})`
+          );
+          console.log(cell);
+          if (
+            cell.style.backgroundImage ===
+            `url("./assets/tiles/forest_tile.png")`
+          ) {
             forestCount++;
           }
         }
-        console.log(`Row ${row} is full!`);
+        borderlandsPoints += 6;
+        document.querySelector(".borderlands").innerHTML = borderlandsPoints;
       }
     });
-    if(forestCount === 3){
+
+    // We check if each column is full, if it is, we add 6 points
+    shapeCols.forEach((col) => {
+      if (checkColFull(col)) {
+        borderlandsPoints += 6;
+        document.querySelector(".borderlands").innerHTML = borderlandsPoints;
+      }
+    });
+
+
+
+    // If forest count in a row is 3, add 4 points
+
+
+    if (forestCount === 3) {
       threeForestPoints += 4;
-      document.querySelector('.three-forest').innerHTML = threeForestPoints;
+      document.querySelector(".three-forest").innerHTML = threeForestPoints;
     }
   } else if (isOccupied) {
     for (let row = 0; row < arr.length; row++) {
@@ -449,9 +470,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
   }
 }
 
-
-
-
 function checkIsAdjacent() {
   let isAdjacent = false;
   let forestCells = document.querySelectorAll(".cell");
@@ -473,15 +491,25 @@ function checkIsAdjacent() {
 // ?SLEEP VALLEY
 
 // check if row is full
-function selectRow(cell){
+function selectRow(cell) {
   let row = cell.parentElement;
   let cells = Array.from(row.children);
   return cells;
-
 }
-console.log(selectRow(mapCells[0]));
 
 function checkRowFull(row) {
-  let cells = Array.from(document.querySelectorAll(`.row:nth-child(${row + 1}) .cell`));
+  let cells = Array.from(
+    document.querySelectorAll(`.row:nth-child(${row + 1}) .cell`)
+  );
   return cells.every((cell) => cell.style.backgroundImage !== "");
 }
+function checkColFull(col) {
+  let cells = Array.from(
+    document.querySelectorAll(`.row .cell:nth-child(${col + 1})`)
+  );
+  return cells.every((cell) => cell.style.backgroundImage !== "");
+}
+console.log(checkColFull(0));
+console.log(
+  Array.from(document.querySelectorAll(`.row .cell:nth-child(${0 + 1})`))
+);
