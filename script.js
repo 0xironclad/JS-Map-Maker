@@ -334,9 +334,18 @@ let isAdjacentPoints = 0;
 let threeForestPoints = 0;
 let borderlandsPoints = 0;
 
+// Season time units and seasons
+let seasonTimeUnits = 0;
+let currentSeason = "spring";
+const seasons = ["spring", "summer", "autumn", "water"];
+let seasonPoints = 0;
+
 document.querySelector(".edge-forest").innerHTML = isAdjacentPoints;
 document.querySelector(".three-forest").innerHTML = threeForestPoints;
 document.querySelector(".borderlands").innerHTML = borderlandsPoints;
+document.querySelector(".current-ssn").innerHTML = currentSeason;
+
+// Creating an element on the map
 function createElementOnMap(arr, clickedRow, clickedCol) {
   let isOccupied = false;
   let isOverHang = false;
@@ -404,13 +413,18 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       }
     }
 
-    timeUnits += randomElement.time;
+    timeUnits += randomElement.time; // This is the total time units for the game
+    console.log("Time units: ", timeUnits);
+    handleTime(randomElement.time); // This is the time units for the season
+    document.querySelector(".elapsed-time").innerHTML = seasonTimeUnits;
     randomElement = elements[Math.floor(Math.random() * elements.length)];
     clearCells();
     createElement(randomElement.shape);
+    console.log(randomElement.shape);
+    time.innerHTML = randomElement.time;
 
     let forestCount = 0;
-    
+
     // We check if each row is full, if it is, we add 6 points. Also we count the forest tiles in the row
     shapeRows.forEach((row) => {
       if (checkRowFull(row)) {
@@ -439,15 +453,13 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       }
     });
 
-
-
     // If forest count in a row is 3, add 4 points
-
 
     if (forestCount === 3) {
       threeForestPoints += 4;
       document.querySelector(".three-forest").innerHTML = threeForestPoints;
     }
+    
   } else if (isOccupied) {
     for (let row = 0; row < arr.length; row++) {
       for (let col = 0; col < arr[row].length; col++) {
@@ -513,3 +525,20 @@ console.log(checkColFull(0));
 console.log(
   Array.from(document.querySelectorAll(`.row .cell:nth-child(${0 + 1})`))
 );
+
+// SEASON CHANGES
+
+function handleTime(timeUnit) {
+  seasonTimeUnits += timeUnit;
+  if (seasonTimeUnits >= 7) {
+    changeSeason();
+    seasonTimeUnits -= 7;
+  }
+}
+
+function changeSeason() {
+  const currentSeasonIndex = seasons.indexOf(currentSeason);
+  const nextSeasonIndex = (currentSeasonIndex + 1) % seasons.length;
+  currentSeason = seasons[nextSeasonIndex];
+  document.querySelector(".current-ssn").innerHTML = currentSeason;
+}
