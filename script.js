@@ -394,7 +394,7 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
   let isOverHang = false;
   let isStillSpring = currentSeason === "spring";
   let isStillWinter = currentSeason === "winter";
-  let firstNonZeroRow = -1
+  let firstNonZeroRow = -1;
   console.log("Is still spring: ", isStillSpring);
 
   // Keep track of rows associated with the shape
@@ -417,23 +417,26 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
     }
   }
 
-  let startingCol = 0;
-  for (let col = 0; col < arr[0].length; col++) {
-    let isColumnEmpty = true;
-    for (let row = 0; row < arr.length; row++) {
-      if (arr[row][col] === 1) {
-        isColumnEmpty = false;
-        break;
-      }
-    }
-    if (!isColumnEmpty) {
-      startingCol = col;
-      break;
+  let emptyColsCount = 0;
+  let emptyRowsCount = 0;
+
+  for (let row = 0; row < arr.length; row++) {
+    if (arr[row].every((el) => el === 0)) {
+      emptyRowsCount++;
     }
   }
 
+  for (let col = 0; col < arr[0].length; col++) {
+    let column = arr.map((row) => row[col]);
+    if (column.every((el) => el === 0)) {
+      emptyColsCount++;
+    }
+  }
+
+  console.log("Empty rows count: ", emptyRowsCount);
+  console.log("Empty cols count: ", emptyColsCount);
+
   for (let row = 0; row < arr.length; row++) {
-    let firstNonZeroRow = arr[row].findIndex((el) => el === 1);
     for (let col = 0; col < arr[row].length; col++) {
       if (arr[row][col] === 1) {
         let mapRow = clickedRow + row;
@@ -462,10 +465,19 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
   if (!isOccupied && !isOverHang) {
     for (let row = 0; row < arr.length; row++) {
       for (let col = 0; col < arr[row].length; col++) {
+        if (arr[row].every(el => el === 0)) {
+          continue;
+        }
+  
+        if (arr.map(r => r[col]).every(el => el === 0)) {
+          continue;
+        }
+  
+        let mapRow = clickedRow + row;
+        let mapCol = clickedCol + col;
+        
         if (arr[row][col] === 1) {
-          let mapRow = clickedRow + row - topLeftRow;
-          let mapCol = clickedCol + col - topLeftCol;
-
+         
           let cell = document.querySelector(
             `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
           );
@@ -516,17 +528,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
     time.innerHTML = randomElement.time;
     currentSsnElement.innerHTML = currentSeason;
 
-    // handleTime(randomElement.time); // handles time units for the season
-    // document.querySelector(".elapsed-time").innerHTML = seasonTimeUnits;
-    // randomElement = elements[Math.floor(Math.random() * elements.length)];
-    // clearCells();
-    // createElement(randomElement.shape);
-    // console.log(randomElement.shape);
-    // time.innerHTML = randomElement.time;
-
-    let forestCount = 0;
-
-    /*
     // We check if each row is full, if it is, we add 6 points. Also we count the forest tiles in the row
     shapeRows.forEach((row) => {
       if (checkRowFull(row)) {
@@ -553,6 +554,18 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       }
     });
 
+    // handleTime(randomElement.time); // handles time units for the season
+    // document.querySelector(".elapsed-time").innerHTML = seasonTimeUnits;
+    // randomElement = elements[Math.floor(Math.random() * elements.length)];
+    // clearCells();
+    // createElement(randomElement.shape);
+    // console.log(randomElement.shape);
+    // time.innerHTML = randomElement.time;
+
+    let forestCount = 0;
+
+    /*
+    
     // We check if each column is full, if it is, we add 6 points
     shapeCols.forEach((col) => {
       if (checkColFull(col)) {
