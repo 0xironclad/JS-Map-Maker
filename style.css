@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-body{
+body {
   background: url("./assets/theme.png");
   background-position: center;
   background-size: cover;
@@ -33,16 +33,15 @@ body{
   border-radius: 5px;
 }
 
-h4{
-position: absolute;
-top: 20vh;
-left: 20%;
+h4 {
+  position: absolute;
+  top: 20vh;
+  left: 20%;
 }
-.timeLeft{
+.timeLeft {
   position: absolute;
   top: 23vh;
   left: 20%;
-
 }
 
 .div2 {
@@ -177,7 +176,10 @@ left: 20%;
   position: relative;
   background-position: center;
 }
-.potatoes, .edge-forest, .three-forest, .borderlands{
+.potatoes,
+.edge-forest,
+.three-forest,
+.borderlands {
   position: absolute;
   bottom: 0;
   right: 50%;
@@ -219,7 +221,7 @@ left: 20%;
   justify-content: center;
 }
 .autumn {
-  background-color:#eca96a;
+  background-color: #eca96a;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -232,29 +234,69 @@ left: 20%;
   align-items: center;
   justify-content: center;
 }
-.row1 p{
-    font-size: 12px;
-    display: flex;
-    gap: 5px;
-    flex-direction: row;
-    justify-content: space-between;
-
+.row1 p {
+  font-size: 12px;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.row2{
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.row2 {
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.row2 p{
-    text-align: center;
+.row2 p {
+  text-align: center;
 }
-hr{
+hr {
   width: 100%;
   margin: 0 auto;
   height: 2px;
   background-color: black;
   border: none;
   border-radius: 2px;
+}
+
+/* GAME OVER */
+.game-over {
+  position: absolute;
+  top: 30vh;
+  left: 35%;
+  opacity: 0.9;
+  width: 40%;
+  height: 40%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  box-shadow: 5px 5px 8px rgb(168, 168, 168);
+  background: white;
+  border-radius: 10px;
+
+}
+.game-overWrapper{
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(24, 24, 24, 0.5));
+  z-index: 1;
+}
+.game-over h1{
+  margin-bottom: 30px;
+}
+.game-over button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
 }
