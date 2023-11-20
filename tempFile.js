@@ -257,11 +257,4 @@ switch (currentSeason) {
 
 
 
-      // season end forest
-      springPoints += seasonForestPointsSpring;
-      isAdjacentPoints += seasonForestPointsSpring;
-      mission1.innerHTML = isAdjacentPoints;
-      springP.innerHTML = springPoints;
-      seasonForestPointsSpring = 0;
-      console.log("Spring points: ", springPoints);
-      console.log("Season forest points: ", seasonForestPointsSpring);
+  

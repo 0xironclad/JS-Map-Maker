@@ -254,8 +254,6 @@ if (!isGameOver) {
   createElement(shape);
 }
 
-// console.log(randomElement.shape);
-
 function rotateShape() {
   const shape = randomElement.shape;
   const size = shape.length;
@@ -328,7 +326,6 @@ mapCells.forEach((cell) => {
   cell.addEventListener("click", () => {
     let coordinates = getCellCoordinates(cell);
     createElementOnMap(randomElement.shape, coordinates.row, coordinates.col);
-    console.log(isAdjacentPoints);
   });
 });
 
@@ -396,7 +393,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
     let isOverHang = false;
     let isStillSpring = currentSeason === "spring";
     let isStillWinter = currentSeason === "winter";
-    console.log("Is still spring: ", isStillSpring);
 
     // Keep track of rows associated with the shape
     let shapeRows = new Set();
@@ -473,45 +469,54 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
 
           let mapRow = clickedRow + row - topLeftRow;
           let mapCol = clickedCol + col - topLeftCol;
-          console.log("MAP ROWS: ", mapRow, "MAP COLS: ", mapCol);
 
           if (arr[row][col] === 1) {
             let cell = document.querySelector(
               `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
             );
-
+            let coordinates = getCellCoordinates(cell);
             // placing water tiles
             if (randomElement.type === "water") {
               cell.style.backgroundImage = `url("./assets/tiles/water_tile.png")`;
+              // !Adjacent Water Points
+              let adjacentCells = getAdjacentCells(
+                coordinates.row,
+                coordinates.col
+              );
+              adjacentCells.forEach((adjacentCell) => {
+                let mapCellIndex = adjacentCell.row * 11 + adjacentCell.col;
 
-              // !BorderLand Points
-              shapeCols.forEach((col) => {
-                if (checkColFull(col)) {
-                  borderlandsPoints += 6;
-                  mission4.innerHTML = borderlandsPoints;
-                  if (currentSeason === "winter") {
-                    winterPoints += 6;
-                    winterP = winterPoints;
-                  } else if (currentSeason === "autumn") {
-                    springPoints += 6;
-                  }
-                }
-              });
-
-              shapeRows.forEach((row) => {
-                if (checkRowFull(row)) {
-                  borderlandsPoints += 6;
-                  mission4.innerHTML = borderlandsPoints;
-                  if (currentSeason === "winter") {
-                    winterPoints += 6;
-                    winterP = winterPoints;
-                  } else if (currentSeason === "spring") {
-                    springPoints += 6;
+                if (
+                  adjacentCell.row >= 0 &&
+                  adjacentCell.col >= 0 &&
+                  mapCellIndex < mapCells.length
+                ) {
+                  let cell = mapCells.item(mapCellIndex);
+                  if (
+                    cell.style.backgroundImage ===
+                    `url("./assets/tiles/plains_tile.png")`
+                  ) {
+                    if (currentSeason === "summer") {
+                      summerPoints += 2;
+                      adjaCentWaterPoints += 2;
+                      mission3.innerHTML = adjaCentWaterPoints;
+                      console.log(
+                        "ADJACENT WATER POINTS: ",
+                        adjaCentWaterPoints
+                      );
+                    } else if (currentSeason === "autumn") {
+                      autumnPoints += 2;
+                      adjaCentWaterPoints += 2;
+                      mission3.innerHTML = adjaCentWaterPoints;
+                      console.log(
+                        "ADJACENT WATER POINTS: ",
+                        adjaCentWaterPoints
+                      );
+                    }
                   }
                 }
               });
             } else if (randomElement.type === "forest") {
-              // placing forest tiles
               cell.style.backgroundImage = `url("./assets/tiles/forest_tile.png")`;
 
               if (
@@ -538,6 +543,37 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
             } else if (randomElement.type === "farm") {
               // placing farm tiles
               cell.style.backgroundImage = `url("./assets/tiles/plains_tile.png")`;
+              // !Adjacent farm tiles
+              let adjacentCells = getAdjacentCells(
+                coordinates.row,
+                coordinates.col
+              );
+
+              adjacentCells.forEach((adjacentCell) => {
+                let mapCellIndex = adjacentCell.row * 11 + adjacentCell.col;
+
+                if (
+                  adjacentCell.row >= 0 &&
+                  adjacentCell.col >= 0 &&
+                  mapCellIndex < mapCells.length
+                ) {
+                  let cell = mapCells.item(mapCellIndex);
+                  if (
+                    cell.style.backgroundImage ===
+                    `url("./assets/tiles/water_tile.png")`
+                  ) {
+                    if (currentSeason === "summer") {
+                      summerPoints += 2;
+                      adjaCentWaterPoints += 2;
+                      mission3.innerHTML = adjaCentWaterPoints;
+                    } else if (currentSeason === "autumn") {
+                      autumnPoints += 2;
+                      adjaCentWaterPoints += 2;
+                      mission3.innerHTML = adjaCentWaterPoints;
+                    }
+                  }
+                }
+              });
             } else if (randomElement.type === "town") {
               cell.style.backgroundImage = `url("./assets/tiles/village_tile.png")`;
             }
@@ -551,6 +587,36 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
           }
         }
       }
+      // !BorderLand Points
+      shapeCols.forEach((col) => {
+        if (checkColFull(col)) {
+          if (currentSeason === "winter") {
+            borderlandsPoints += 6;
+            mission4.innerHTML = borderlandsPoints;
+            winterPoints += 6;
+            winterP = winterPoints;
+          } else if (currentSeason === "autumn") {
+            autumnPoints += 6;
+            borderlandsPoints += 6;
+            mission4.innerHTML = borderlandsPoints;
+          }
+        }
+      });
+
+      shapeRows.forEach((row) => {
+        if (checkRowFull(row)) {
+          if (currentSeason === "winter") {
+            borderlandsPoints += 6;
+            mission4.innerHTML = borderlandsPoints;
+            winterPoints += 6;
+            winterP = winterPoints;
+          } else if (currentSeason === "autumn") {
+            autumnPoints += 6;
+            borderlandsPoints += 6;
+            mission4.innerHTML = borderlandsPoints;
+          }
+        }
+      });
 
       unitsLeft -= randomElement.time;
       timeLeft.innerHTML = unitsLeft;
@@ -559,6 +625,8 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       handleTime(randomElement.time); // handles time units for the season
       document.querySelector(".elapsed-time").innerHTML = seasonTimeUnits;
       randomElement = elements[Math.floor(Math.random() * elements.length)];
+
+      // !Three Forest Points
       if (
         seasonTimeUnits + randomElement.time >= 7 &&
         currentSeason === "spring"
@@ -585,11 +653,11 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
         summerSeasonRows.clear();
       }
       clearCells();
-      console.log("SEASON ROWS AT THIS POINT: ", springSeasonRows);
       createElement(randomElement.shape);
       time.innerHTML = randomElement.time;
       currentSsnElement.innerHTML = currentSeason;
 
+      // !Season Points at the end of the season
       if (currentSeason === "spring") {
         springP.innerHTML = 0;
       } else {
@@ -610,58 +678,7 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       } else {
         winterP.innerHTML = winterPoints;
       }
-      let forestCount = 0;
       // We check if each row is full, if it is, we add 6 points. Also we count the forest tiles in the row
-      shapeRows.forEach((row) => {
-        if (checkRowFull(row)) {
-          for (let i = 0; i < cols; i++) {
-            let cell = document.querySelector(
-              `.row:nth-child(${row + 1}) .cell:nth-child(${i + 1})`
-            );
-            console.log(cell);
-            if (
-              cell.style.backgroundImage ===
-              `url("./assets/tiles/forest_tile.png")`
-            ) {
-              forestCount++;
-            }
-          }
-          borderlandsPoints += 6;
-          if (currentSeason === "winter") {
-            winterPoints += 6;
-            winterP = winterPoints;
-          } else if (currentSeason === "spring") {
-            springPoints += 6;
-            springP.innerHTML = springPoints;
-          }
-        }
-      });
-
-      // handleTime(randomElement.time); // handles time units for the season
-      // document.querySelector(".elapsed-time").innerHTML = seasonTimeUnits;
-      // randomElement = elements[Math.floor(Math.random() * elements.length)];
-      // clearCells();
-      // createElement(randomElement.shape);
-      // console.log(randomElement.shape);
-      // time.innerHTML = randomElement.time;
-
-      /*
-    
-    // We check if each column is full, if it is, we add 6 points
-    
-
-    // If forest count in a row is 3, add 4 points
-
-    if (forestCount === 3) {
-      threeForestPoints += 4;
-      if (currentSeason === "spring") {
-        springPoints += 4;
-      } else if (currentSeason === "summer") {
-        summerPoints += 4;
-      }
-      document.querySelector(".three-forest").innerHTML = threeForestPoints;
-    }
-      */
     } else if (isOccupied) {
       for (let row = 0; row < arr.length; row++) {
         for (let col = 0; col < arr[row].length; col++) {
@@ -725,9 +742,6 @@ function checkColFull(col) {
   );
   return cells.every((cell) => cell.style.backgroundImage !== "");
 }
-console.log(
-  Array.from(document.querySelectorAll(`.row .cell:nth-child(${0 + 1})`))
-);
 
 // SEASON CHANGES
 
@@ -750,18 +764,17 @@ function changeSeason() {
   document.querySelector(".current-ssn").innerHTML = currentSeason;
 
   totalPoints = springPoints + summerPoints + autumnPoints + winterPoints;
-  console.log("TOTAL POINTS: ", totalPoints);
   totalP.innerHTML = totalPoints;
 }
 
 // Get adjacent cells
-function getAdjacentCells(row, col) {
-  const top = { row: row - 1, col };
-  const bottom = { row: row + 1, col };
-  const left = { row, col: col - 1 };
-  const right = { row, col: col + 1 };
+function getAdjacentCells(r, c) {
+  const top = { row: r - 1, col: c };
+  const bottom = { row: r + 1, col: c };
+  const left = { row: r, col: c - 1 };
+  const right = { row: r, col: c + 1 };
 
-  return { top, bottom, left, right };
+  return [top, bottom, left, right];
 }
 
 function countRowsWithThreeTrees() {
@@ -814,7 +827,7 @@ function gameOver() {
     document.querySelector(".game-overWrapper").style.display = "block";
     document.querySelector(".game-over").style.display = "flex";
     finalScore.innerHTML = totalPoints;
-
+    springP.innerHTML = springPoints;
   }
 }
 
