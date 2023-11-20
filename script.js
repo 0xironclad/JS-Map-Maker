@@ -357,7 +357,7 @@ mapCells.forEach((cell) => {
             } else {
               cell.classList.add("highlight-red");
             }
-          } else{
+          } else {
             cell.classList.add("highlight-red");
           }
         }
@@ -393,7 +393,6 @@ let totalP = document.querySelector(".total-points");
 let gameOverDiv = document.querySelector(".game-over");
 let finalScore = document.querySelector(".finalScore");
 
-
 // Actives
 let active1 = document.querySelector(".active1");
 let active2 = document.querySelector(".active2");
@@ -403,8 +402,6 @@ console.log("ACTIVE 1: ", active1);
 console.log("ACTIVE 2: ", active2);
 console.log("ACTIVE 3: ", active3);
 console.log("ACTIVE 4: ", active4);
-
-
 
 mission1.innerHTML = isAdjacentPoints;
 mission2.innerHTML = threeForestPoints;
@@ -438,7 +435,6 @@ let totalPoints = 0;
 // Creating an element on the map
 function createElementOnMap(arr, clickedRow, clickedCol) {
   if (!isGameOver) {
-
     let isStillSpring = currentSeason === "spring";
     let isStillWinter = currentSeason === "winter";
 
@@ -503,18 +499,13 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
     }
     // !STARTED HERE
 
-
     if (!isOccupied && !isOverHang) {
       for (let row = 0; row < arr.length; row++) {
         for (let col = 0; col < arr[row].length; col++) {
-
-
-
           let mapRow = clickedRow + row + topLeftRow;
           let mapCol = clickedCol + col + topLeftCol;
 
           if (arr[row][col] === 1) {
-
             // let cell = document.querySelector(
             //   `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
             // );
@@ -586,6 +577,7 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
               ) {
                 winterPoints += 1;
                 isAdjacentPoints += 1;
+                mission1.innerHTML = isAdjacentPoints;
                 // seasonForestPointsWinter += 1;
               }
             } else if (randomElement.type === "farm") {
@@ -633,7 +625,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
           } else {
             continue;
           }
-
         }
       }
       // !BorderLand Points
@@ -658,7 +649,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
             borderlandsPoints += 6;
             mission4.innerHTML = borderlandsPoints;
             winterPoints += 6;
-            winterP = winterPoints;
           } else if (currentSeason === "autumn") {
             autumnPoints += 6;
             borderlandsPoints += 6;
@@ -713,7 +703,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
         active2.style.display = "inline-block";
         active3.style.display = "none";
         active4.style.display = "none";
-
       } else {
         springP.innerHTML = springPoints;
       }
@@ -895,6 +884,7 @@ function gameOver() {
     document.querySelector(".game-over").style.display = "flex";
     finalScore.innerHTML = totalPoints;
     springP.innerHTML = springPoints;
+    document.querySelector(".borderLandP").innerHTML = borderlandsPoints;
   }
 }
 
