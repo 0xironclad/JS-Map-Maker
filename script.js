@@ -882,9 +882,12 @@ function gameOver() {
     gameOverDiv.style.display = "flex";
     document.querySelector(".game-overWrapper").style.display = "block";
     document.querySelector(".game-over").style.display = "flex";
-    finalScore.innerHTML = totalPoints;
     springP.innerHTML = springPoints;
     document.querySelector(".borderLandP").innerHTML = borderlandsPoints;
+    let pointsFor5Types = calculatePointsFor5Types();
+    totalPoints += pointsFor5Types;
+    finalScore.innerHTML = totalPoints;
+    document.querySelector(".richCountry").innerHTML = pointsFor5Types;
   }
 }
 
@@ -892,3 +895,63 @@ let restartBtn = document.querySelector(".restart");
 restartBtn.addEventListener("click", () => {
   location.reload();
 });
+
+
+// Row with at least the 5 different terrain types
+function checkRowWith5Types() {
+  let rowCount = 0;
+  let rows = 11;
+  let cols = 11;
+  for (let row = 0; row < rows; row++) {
+    let waterTileCount = 0;
+    let forestTileCount = 0;
+    let farmTileCount = 0;
+    let townTileCount = 0;
+    let plainsTileCount = 0;
+
+    for (let col = 0; col < cols; col++) {
+      let cell = document.querySelector(
+        `.row:nth-child(${row + 1}) .cell:nth-child(${col + 1})`
+      );
+      if (
+        cell.style.backgroundImage === `url("./assets/tiles/water_tile.png")`
+      ) {
+        waterTileCount++;
+      } else if (
+        cell.style.backgroundImage === `url("./assets/tiles/forest_tile.png")`
+      ) {
+        forestTileCount++;
+      } else if (
+        cell.style.backgroundImage === `url("./assets/tiles/plains_tile.png")`
+      ) {
+        plainsTileCount++;
+      } else if (
+        cell.style.backgroundImage === `url("./assets/tiles/village_tile.png")`
+      ) {
+        townTileCount++;
+      } else if (
+        cell.style.backgroundImage === `url("./assets/tiles/plains_tile.png")`
+      ) {
+        farmTileCount++;
+      }
+    }
+    if (
+      waterTileCount >= 1 &&
+      forestTileCount >= 1 &&
+      plainsTileCount >= 1 &&
+      townTileCount >= 1 &&
+      farmTileCount >= 1
+    ) {
+      rowCount++;
+    }
+  }
+
+  return rowCount;
+}
+
+// Calculating points for the row with 5 different terrain types
+function calculatePointsFor5Types() {
+  let rowCount = checkRowWith5Types();
+  let points = rowCount * 4;
+  return points;
+}
