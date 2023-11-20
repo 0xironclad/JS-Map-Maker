@@ -1,260 +1,71 @@
-switch (currentSeason) {
-    case "spring":
-      break;
-    case "summer":
-      adjacentCells = Array.from(getAdjacentCells(mapRow, mapCol));
-      adjacentCells.forEach((adjacentCell) => {
-        if (
-          mapCells[adjacentCell.top.row][adjacentCell.top.col].style
-            .backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          summerPoints += 2;
-        } else if (
-          mapCells[adjacentCell.bottom.row][adjacentCell.bottom.col]
-            .style.backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          summerPoints += 2;
-        } else if (
-          mapCells[adjacentCell.left.row][adjacentCell.left.col].style
-            .backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          summerPoints += 2;
-        } else if (
-          mapCells[adjacentCell.right.row][adjacentCell.right.col]
-            .style.backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          summerPoints += 2;
-        }
-        summerP.innerHTML = summerPoints;
-      });
-    case "autumn":
-      adjacentCells = Array.from(getAdjacentCells(mapRow, mapCol));
-      adjacentCells.forEach((adjacentCell) => {
-        if (
-          mapCells[adjacentCell.top.row][adjacentCell.top.col].style
-            .backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          adjaCentWaterPoints += 2;
-          autumnPoints += 2;
-        } else if (
-          mapCells[adjacentCell.bottom.row][adjacentCell.bottom.col]
-            .style.backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          adjaCentWaterPoints += 2;
-          autumnPoints += 2;
-        } else if (
-          mapCells[adjacentCell.left.row][adjacentCell.left.col].style
-            .backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          adjaCentWaterPoints += 2;
-          autumnPoints += 2;
-        } else if (
-          mapCells[adjacentCell.right.row][adjacentCell.right.col]
-            .style.backgroundImage ===
-          `url("./assets/tiles/plains_tile.png)`
-        ) {
-          adjaCentWaterPoints += 2;
-          autumnPoints += 2;
-        }
-        mission3.innerHTML = adjaCentWaterPoints;
-        autumnP.innerHTML = autumnPoints;
-      });
-    case "winter":
-      shapeCols.forEach((col) => {
-        if (checkColFull(col)) {
-          borderlandsPoints += 6;
-          winterPoints += 6;
-          winterP = winterPoints;
-          mission4.innerHTML = borderlandsPoints;
-        }
-      });
-      shapeRows.forEach((row) => {
-        if (checkRowFull(row)) {
-          borderlandsPoints += 6;
-          winterPoints += 6;
-          winterP = winterPoints;
-          mission4.innerHTML = borderlandsPoints;
-        }
-      });
-      break;
-    }
-
-
-
-
-
-    
-    switch (currentSeason) {
-        case "spring":
-          if (
-            mapRow === 0 ||
-            mapRow === rows - 1 ||
-            mapCol === 0 ||
-            mapCol === cols - 1
-          ) {
-            isAdjacentPoints += 1;
-            mission1.innerHTML = isAdjacentPoints;
-            springPoints += 1;
-
-            springP.innerHTML = springPoints;
+matrix.forEach((row, y) => {
+  row.forEach((cell, x) => {
+    cell.addEventListener("click", () => {
+      let canPlace = true;
+      // finding first row and first column which has 1 from the left
+      let rowOffset, colOffset;
+      for (let i = 0; i < newShape.length; i++) {
+        for (let j = 0; j < newShape[i].length; j++) {
+          if (newShape[i][j] === 1) {
+            rowOffset = i;
+            colOffset = j;
+            break;
           }
-          break;
-        case "summer":
-          let rowsWithThreeTrees = countRowsWithThreeTrees();
-          threeForestPoints += rowsWithThreeTrees * 4;
-          summerPoints += rowsWithThreeTrees * 4;
-          summerP.innerHTML = summerPoints;
-          mission2.innerHTML = threeForestPoints;
-          break;
-        case "autumn":
-          let rowsWithThree = countRowsWithThreeTrees();
-          
-          break;
-        case "winter":
-          if (
-            mapRow === 0 ||
-            mapRow === rows - 1 ||
-            mapCol === 0 ||
-            mapCol === cols - 1
-          ) {
-            isAdjacentPoints += 1;
-            mission1.innerHTML = isAdjacentPoints;
-            winterPoints += 1;
-            winterP = winterPoints;
-          }
-
-          // check cols and rows for fullness
-          shapeCols.forEach((col) => {
-            if (checkColFull(col)) {
-              borderlandsPoints += 6;
-              winterPoints += 6;
-              winterP = winterPoints;
-              mission4.innerHTML = borderlandsPoints;
-            }
-          });
-          shapeRows.forEach((row) => {
-            if (checkRowFull(row)) {
-              borderlandsPoints += 6;
-              winterPoints += 6;
-              winterP = winterPoints;
-              mission4.innerHTML = borderlandsPoints;
-            }
-          });
-          break;
+        }
+        if (rowOffset !== undefined) break;
       }
-
-
-
-
-
-
-      let adjacentCells = Array.from(getAdjacentCells(mapRow, mapCol));
-      switch (currentSeason) {
-        case "spring":
-          break;
-        case "summer":
-          adjacentCells.forEach((adjacentCell) => {
-            if (
-              mapCells[adjacentCell.top.row][adjacentCell.top.col].style
-                .backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.bottom.row][adjacentCell.bottom.col]
-                .style.backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.left.row][adjacentCell.left.col].style
-                .backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.right.row][adjacentCell.right.col]
-                .style.backgroundImage ===
-                `url("./assets/tiles/water_tile.png)`
-            ) {
-              summerPoints += 2;
-              summerP.innerHTML = summerPoints;
-              console.log("Summer points: ", summerPoints);
-              adjaCentWaterPoints += 2;
-              mission3.innerHTML = adjaCentWaterPoints;
+ 
+      // First, check if we can place the new shape
+      newShape.forEach((shapeRow, i) => {
+        shapeRow.forEach((value, j) => {
+          if (value === 1) {
+            let placedCell = matrix[y + i - rowOffset] && matrix[y + i - rowOffset][x + j - colOffset];
+            if (!placedCell || placedCell.style.backgroundImage !== baseImageUrl) {
+              canPlace = false;
             }
-          });
-
-          break;
-        case "autumn":
-          adjacentCells.forEach((adjacentCell) => {
-            if (
-              mapCells[adjacentCell.top.row][adjacentCell.top.col].style
-                .backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.bottom.row][adjacentCell.bottom.col]
-                .style.backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.left.row][adjacentCell.left.col].style
-                .backgroundImage ===
-                `url("./assets/tiles/water_tile.png)` ||
-              mapCells[adjacentCell.right.row][adjacentCell.right.col]
-                .style.backgroundImage ===
-                `url("./assets/tiles/water_tile.png)`
-            ) {
-              autumnPoints += 2;
-              autumnP.innerHTML = autumnPoints;
-              adjaCentWaterPoints += 2;
-              mission3.innerHTML = adjaCentWaterPoints;
-            }
-          });
-
-          break;
-        case "winter":
-          shapeCols.forEach((col) => {
-            if (checkColFull(col)) {
-              borderlandsPoints += 6;
-              winterPoints += 6;
-              winterP.innerHTML = winterPoints;
-              mission4.innerHTML = borderlandsPoints;
-            }
-          });
-          shapeRows.forEach((row) => {
-            if (checkRowFull(row)) {
-              borderlandsPoints += 6;
-              winterPoints += 6;
-              winterP.innerHTML = winterPoints;
-              mission4.innerHTML = borderlandsPoints;
-            }
-          });
-          break;
-      }
-
-
-
-
-
-
-
-
-      if (currentSeason === "winter") {
-        shapeCols.forEach((col) => {
-          if (checkColFull(col)) {
-            borderlandsPoints += 6;
-            winterPoints += 6;
-            winterP.innerHTML = winterPoints;
-            mission4.innerHTML = borderlandsPoints;
           }
         });
-        shapeRows.forEach((row) => {
-          if (checkRowFull(row)) {
-            borderlandsPoints += 6;
-            winterPoints += 6;
-            winterP.innerHTML = winterPoints;
-            mission4.innerHTML = borderlandsPoints;
-          }
+      });
+ 
+      // If we can place the new shape, then place it
+      if (canPlace) {
+        newShape.forEach((shapeRow, i) => {
+          shapeRow.forEach((value, j) => {
+            if (value === 1) {
+              let placedCell = matrix[y + i - rowOffset][x + j - colOffset];
+              let imageUrl;
+              switch (randomElement.type) {
+                case "water":
+                  imageUrl = 'url("MapMakerPhotos/tiles/water_tile.png")';
+                  break;
+                case "town":
+                  imageUrl = 'url("MapMakerPhotos/tiles/village_tile.png")';
+                  break;
+                case "farm":
+                  imageUrl = 'url("MapMakerPhotos/tiles/plains_tile.png")';
+                  break;
+                case "forest":
+                  imageUrl = 'url("MapMakerPhotos/tiles/forest_tile.png")';
+                  break;
+              }
+              placedCell.style.backgroundImage = imageUrl;
+            }
+          });
         });
+        // Update the time
+        updateTimeAndScore(randomElement);
+        randomElement = elements[Math.floor(Math.random() * elements.length)];
+        time.innerHTML = randomElement.time;
+        clear();
+        createRandomShape(randomElement);
+       
+        console.log(totalTime);
+        console.log(seasonTime);
+ 
       }
-      
+    });
+  });
+});
+has context menu
 
-
-
-  
+y == row

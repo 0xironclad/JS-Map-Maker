@@ -328,7 +328,43 @@ mapCells.forEach((cell) => {
     createElementOnMap(randomElement.shape, coordinates.row, coordinates.col);
   });
 });
+let isOccupied = false;
+let isOverHang = false;
 
+mapCells.forEach((cell) => {
+  cell.addEventListener("mousemove", () => {
+    mapCells.forEach((cell) => {
+      cell.classList.remove("highlight-green");
+      cell.classList.remove("highlight-red");
+    });
+
+    let coordinates = getCellCoordinates(cell);
+    let topLeftRow = coordinates.row;
+    let topLeftCol = coordinates.col;
+
+    for (let row = 0; row < randomElement.shape.length; row++) {
+      for (let col = 0; col < randomElement.shape[row].length; col++) {
+        if (randomElement.shape[row][col] === 1) {
+          let mapRow = topLeftRow + row;
+          let mapCol = topLeftCol + col;
+
+          if (mapRow >= 0 && mapRow < rows && mapCol >= 0 && mapCol < cols) {
+            let cell = document.querySelector(
+              `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
+            );
+            if (cell.style.backgroundImage === "") {
+              cell.classList.add("highlight-green");
+            } else {
+              cell.classList.add("highlight-red");
+            }
+          } else{
+            cell.classList.add("highlight-red");
+          }
+        }
+      }
+    }
+  });
+});
 let timeUnits = 0;
 let isAdjacentPoints = 0;
 let threeForestPoints = 0;
@@ -389,8 +425,7 @@ let totalPoints = 0;
 // Creating an element on the map
 function createElementOnMap(arr, clickedRow, clickedCol) {
   if (!isGameOver) {
-    let isOccupied = false;
-    let isOverHang = false;
+
     let isStillSpring = currentSeason === "spring";
     let isStillWinter = currentSeason === "winter";
 
@@ -403,15 +438,13 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
 
     for (let i = 0; i < arr.length; i++) {
       for (let j = 0; j < arr[i].length; j++) {
-        if (arr[i][j] === 1) {
+        if (arr[i][j] === 1 && j < topLeftCol) {
           topLeftCol = j;
           topLeftRow = i;
           break;
         }
       }
-      if (topLeftRow !== null) {
-        break;
-      }
+      if (topLeftRow !== 0) break;
     }
 
     let emptyColsCount = 0;
@@ -455,25 +488,28 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
         }
       }
     }
+    // !STARTED HERE
+
 
     if (!isOccupied && !isOverHang) {
       for (let row = 0; row < arr.length; row++) {
         for (let col = 0; col < arr[row].length; col++) {
-          if (arr[row].every((el) => el === 0)) {
-            continue;
-          }
 
-          if (arr.map((r) => r[col]).every((el) => el === 0)) {
-            continue;
-          }
 
-          let mapRow = clickedRow + row - topLeftRow;
-          let mapCol = clickedCol + col - topLeftCol;
+
+          let mapRow = clickedRow + row + topLeftRow;
+          let mapCol = clickedCol + col + topLeftCol;
 
           if (arr[row][col] === 1) {
-            let cell = document.querySelector(
-              `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
-            );
+
+            // let cell = document.querySelector(
+            //   `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
+            // );
+            let indexOfCell = mapRow * 11 + mapCol;
+            console.log("INDEX OF CELL: ", indexOfCell);
+            let cell = mapCells.item(indexOfCell);
+            console.log("CELL: ", cell);
+
             let coordinates = getCellCoordinates(cell);
             // placing water tiles
             if (randomElement.type === "water") {

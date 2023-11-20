@@ -300,3 +300,11 @@ hr {
   cursor: pointer;
   margin-top: 20px;
 }
+
+.highlight-green {
+  outline: 1px solid green;
+}
+
+.highlight-red {
+  outline: 1px solid red;
+}
