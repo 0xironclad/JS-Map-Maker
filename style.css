@@ -185,6 +185,25 @@ h4 {
   right: 50%;
   color: white;
 }
+.letter{
+  position: absolute;
+  bottom: 0;
+  right: 10%;
+  color: white;
+}
+.active1, .active2, .active3, .active4{
+  position: absolute;
+  bottom: 0;
+  right: 20%;
+  width: 10px;
+  display: none;
+  height: 10px;
+  color: white;
+  border: 1px solid green;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background-color: green;
+}
 
 /* *scores div */
 .scores {

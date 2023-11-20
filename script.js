@@ -393,6 +393,19 @@ let totalP = document.querySelector(".total-points");
 let gameOverDiv = document.querySelector(".game-over");
 let finalScore = document.querySelector(".finalScore");
 
+
+// Actives
+let active1 = document.querySelector(".active1");
+let active2 = document.querySelector(".active2");
+let active3 = document.querySelector(".active3");
+let active4 = document.querySelector(".active4");
+console.log("ACTIVE 1: ", active1);
+console.log("ACTIVE 2: ", active2);
+console.log("ACTIVE 3: ", active3);
+console.log("ACTIVE 4: ", active4);
+
+
+
 mission1.innerHTML = isAdjacentPoints;
 mission2.innerHTML = threeForestPoints;
 mission4.innerHTML = borderlandsPoints;
@@ -508,7 +521,6 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
             let indexOfCell = mapRow * 11 + mapCol;
             console.log("INDEX OF CELL: ", indexOfCell);
             let cell = mapCells.item(indexOfCell);
-            console.log("CELL: ", cell);
 
             let coordinates = getCellCoordinates(cell);
             // placing water tiles
@@ -621,6 +633,7 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
           } else {
             continue;
           }
+
         }
       }
       // !BorderLand Points
@@ -696,21 +709,39 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
       // !Season Points at the end of the season
       if (currentSeason === "spring") {
         springP.innerHTML = 0;
+        active1.style.display = "inline-block";
+        active2.style.display = "inline-block";
+        active3.style.display = "none";
+        active4.style.display = "none";
+
       } else {
         springP.innerHTML = springPoints;
       }
       if (currentSeason === "summer") {
         summerP.innerHTML = 0;
+        active1.style.display = "none";
+
+        active2.style.display = "inline-block";
+        active3.style.display = "inline-block";
+        active4.style.display = "none";
       } else {
         summerP.innerHTML = summerPoints;
       }
       if (currentSeason === "autumn") {
         autumnP.innerHTML = 0;
+        active1.style.display = "none";
+        active2.style.display = "none";
+        active3.style.display = "inline-block";
+        active4.style.display = "inline-block";
       } else {
         autumnP.innerHTML = autumnPoints;
       }
       if (currentSeason === "winter") {
         winterP.innerHTML = 0;
+        active2.style.display = "none";
+        active3.style.display = "none";
+        active4.style.display = "inline-block";
+        active1.style.display = "inline-block";
       } else {
         winterP.innerHTML = winterPoints;
       }
