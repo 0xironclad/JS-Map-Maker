@@ -890,10 +890,12 @@ function gameOver() {
     let silosPoints = calculatePointsForOddNumberedSilo();
     let mountainPoints = checkMountainSurrounded() * 1;
     let emptyFieldsPoints = emptyFieldsAdjacentVillage();
-    totalPoints += silosPoints + mountainPoints + emptyFieldsPoints;
+    let mountainAdjacentWaterPoints = mountainAdjacentWater();
+    totalPoints += silosPoints + mountainPoints + emptyFieldsPoints + mountainAdjacentWaterPoints;
     document.querySelector(".surrounded").innerHTML = mountainPoints;
     document.querySelector(".silos").innerHTML = silosPoints;
     document.querySelector(".empty").innerHTML = emptyFieldsPoints; 
+    document.querySelector(".magician").innerHTML = mountainAdjacentWaterPoints;
     finalScore.innerHTML = totalPoints;
     document.querySelector(".richCountry").innerHTML = pointsFor5Types;
   }
@@ -1062,4 +1064,37 @@ function emptyFieldsAdjacentVillage(){
     }
   }
   return fieldsCount * 2;
+}
+
+// We get 3 points for each of the mountain fields adjacent to water fields
+function mountainAdjacentWater(){
+  let rows = 11;
+  let cols = 11;
+  let mountainCount = 0;
+  for(let row = 0; row < rows; row++){
+    for(let col = 0; col < cols; col++){
+      let cell = document.querySelector(
+        `.row:nth-child(${row + 1}) .cell:nth-child(${col + 1})`
+      );
+      if(cell.style.backgroundImage === `url("./assets/tiles/mountain_tile.png")`){
+        let adjacentCells = getAdjacentCells(row, col);
+        adjacentCells.forEach((adjacentCell) => {
+          if (
+            adjacentCell.row >= 0 &&
+            adjacentCell.col >= 0 &&
+            adjacentCell.row < rows &&
+            adjacentCell.col < cols
+          ) {
+            let mapCellIndex = adjacentCell.row * 11 + adjacentCell.col;
+            let cell = mapCells.item(mapCellIndex);
+
+            if (cell.style.backgroundImage === `url("./assets/tiles/water_tile.png")`) {
+              mountainCount += 1;
+            }
+          }
+        });
+      }
+    }
+  }
+  return mountainCount * 3;
 }
