@@ -886,6 +886,9 @@ function gameOver() {
     document.querySelector(".borderLandP").innerHTML = borderlandsPoints;
     let pointsFor5Types = calculatePointsFor5Types();
     totalPoints += pointsFor5Types;
+    let silosPoints = calculatePointsForOddNumberedSilo();
+    totalPoints += silosPoints;
+    document.querySelector(".silos").innerHTML = silosPoints;
     finalScore.innerHTML = totalPoints;
     document.querySelector(".richCountry").innerHTML = pointsFor5Types;
   }
@@ -930,7 +933,7 @@ function checkRowWith5Types() {
       ) {
         townTileCount++;
       } else if (
-        cell.style.backgroundImage === `url("./assets/tiles/plains_tile.png")`
+        cell.style.backgroundImage === `url("./assets/tiles/mountain_tile.png")`
       ) {
         farmTileCount++;
       }
@@ -953,5 +956,28 @@ function checkRowWith5Types() {
 function calculatePointsFor5Types() {
   let rowCount = checkRowWith5Types();
   let points = rowCount * 4;
+  return points;
+}
+
+// Odd Numbered Silos 
+// points for each odd numbered full column
+function checkOddNumberedSilo() {
+  let colCount = 0;
+  let rows = 11;
+  let cols = 11;
+  
+  for(let col=0;col < cols; col += 2) {
+    if(checkColFull(col)) {
+      colCount++;
+    }
+  }
+
+  return colCount;
+}
+
+// points for thw odd numbered silos
+function calculatePointsForOddNumberedSilo() {
+  let colCount = checkOddNumberedSilo();
+  let points = colCount * 10;
   return points;
 }
