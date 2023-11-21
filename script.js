@@ -497,21 +497,19 @@ function createElementOnMap(arr, clickedRow, clickedCol) {
         }
       }
     }
-    // !STARTED HERE
 
     if (!isOccupied && !isOverHang) {
       for (let row = 0; row < arr.length; row++) {
         for (let col = 0; col < arr[row].length; col++) {
           let mapRow = clickedRow + row + topLeftRow;
           let mapCol = clickedCol + col + topLeftCol;
-
+          let indexOfCell = mapRow * 11 + mapCol;
+          let cell = mapCells.item(indexOfCell);
           if (arr[row][col] === 1) {
             // let cell = document.querySelector(
             //   `.row:nth-child(${mapRow + 1}) .cell:nth-child(${mapCol + 1})`
             // );
-            let indexOfCell = mapRow * 11 + mapCol;
-            console.log("INDEX OF CELL: ", indexOfCell);
-            let cell = mapCells.item(indexOfCell);
+
 
             let coordinates = getCellCoordinates(cell);
             // placing water tiles
@@ -880,8 +878,8 @@ function gameOver() {
     clearCells();
     unitsLeft = 0;
     gameOverDiv.style.display = "flex";
-    document.querySelector(".game-overWrapper").style.display = "block";
-    document.querySelector(".game-over").style.display = "flex";
+    document.querySelector(".game-overWrapper").style.display = "flex";
+    document.querySelector(".game-over").style.display = "block";
     springP.innerHTML = springPoints;
     document.querySelector(".borderLandP").innerHTML = borderlandsPoints;
     document.querySelector(".sleepy").innerHTML = threeForestPoints;
@@ -891,8 +889,11 @@ function gameOver() {
     totalPoints += pointsFor5Types;
     let silosPoints = calculatePointsForOddNumberedSilo();
     let mountainPoints = checkMountainSurrounded() * 1;
-    totalPoints += silosPoints + mountainPoints;
+    let emptyFieldsPoints = emptyFieldsAdjacentVillage();
+    totalPoints += silosPoints + mountainPoints + emptyFieldsPoints;
+    document.querySelector(".surrounded").innerHTML = mountainPoints;
     document.querySelector(".silos").innerHTML = silosPoints;
+    document.querySelector(".empty").innerHTML = emptyFieldsPoints; 
     finalScore.innerHTML = totalPoints;
     document.querySelector(".richCountry").innerHTML = pointsFor5Types;
   }
@@ -1028,4 +1029,37 @@ function checkMountainSurrounded() {
   }
 
   return mountainCount;
+}
+
+// For all the empty fields adjacent to village fields, we get 2 points
+function emptyFieldsAdjacentVillage(){
+  let fieldsCount = 0;
+  let rows = 11;
+  let cols = 11;
+  for(let row = 0; row < rows; row++){
+    for(let col = 0; col < cols; col++){
+      let cell = document.querySelector(
+        `.row:nth-child(${row + 1}) .cell:nth-child(${col + 1})`
+      );
+      if(cell.style.backgroundImage === `url("./assets/tiles/village_tile.png")`){
+        let adjacentCells = getAdjacentCells(row, col);
+        adjacentCells.forEach((adjacentCell) => {
+          if (
+            adjacentCell.row >= 0 &&
+            adjacentCell.col >= 0 &&
+            adjacentCell.row < rows &&
+            adjacentCell.col < cols
+          ) {
+            let mapCellIndex = adjacentCell.row * 11 + adjacentCell.col;
+            let cell = mapCells.item(mapCellIndex);
+
+            if (cell.style.backgroundImage === "") {
+              fieldsCount += 1;
+            }
+          }
+        });
+      }
+    }
+  }
+  return fieldsCount * 2;
 }

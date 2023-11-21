@@ -284,15 +284,12 @@ hr {
 
 /* GAME OVER */
 .game-over {
-  position: absolute;
-  top: 25vh;
-  left: 35%;
   opacity: 0.9;
   width: 40%;
   height: fit-content;
-  display: none;
+  display:none;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   padding: 30px;
 
@@ -302,8 +299,10 @@ hr {
   border-radius: 10px;
 }
 .game-overWrapper {
-  display: none;
+  display:none;
   position: absolute;
+  align-items: center;
+  justify-content: center;
   top: 0;
   left: 0;
   width: 100vw;
@@ -334,3 +333,5 @@ hr {
 .highlight-red {
   outline: 1px solid red;
 }
+
+
