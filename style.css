@@ -185,13 +185,16 @@ h4 {
   right: 50%;
   color: white;
 }
-.letter{
+.letter {
   position: absolute;
   bottom: 0;
   right: 10%;
   color: white;
 }
-.active1, .active2, .active3, .active4{
+.active1,
+.active2,
+.active3,
+.active4 {
   position: absolute;
   bottom: 0;
   right: 20%;
@@ -282,22 +285,23 @@ hr {
 /* GAME OVER */
 .game-over {
   position: absolute;
-  top: 30vh;
+  top: 25vh;
   left: 35%;
   opacity: 0.9;
   width: 40%;
-  height: 40%;
+  height: fit-content;
   display: none;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 30px;
+
   border: 1px solid white;
   box-shadow: 5px 5px 8px rgb(168, 168, 168);
   background: white;
   border-radius: 10px;
-
 }
-.game-overWrapper{
+.game-overWrapper {
   display: none;
   position: absolute;
   top: 0;
@@ -307,17 +311,20 @@ hr {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(24, 24, 24, 0.5));
   z-index: 1;
 }
-.game-over h1{
+.game-over h1 {
   margin-bottom: 30px;
 }
 .game-over button {
   padding: 5px 10px;
   border-radius: 5px;
-  background: green;
+  background: #e58225;
   color: white;
   border: none;
   cursor: pointer;
   margin-top: 20px;
+}
+.game-over span {
+  color: green;
 }
 
 .highlight-green {

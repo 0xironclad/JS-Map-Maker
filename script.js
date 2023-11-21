@@ -884,10 +884,14 @@ function gameOver() {
     document.querySelector(".game-over").style.display = "flex";
     springP.innerHTML = springPoints;
     document.querySelector(".borderLandP").innerHTML = borderlandsPoints;
+    document.querySelector(".sleepy").innerHTML = threeForestPoints;
+    document.querySelector(".edgy").innerHTML = isAdjacentPoints;
+    document.querySelector(".watering").innerHTML = adjaCentWaterPoints
     let pointsFor5Types = calculatePointsFor5Types();
     totalPoints += pointsFor5Types;
     let silosPoints = calculatePointsForOddNumberedSilo();
-    totalPoints += silosPoints;
+    let mountainPoints = checkMountainSurrounded() * 1;
+    totalPoints += silosPoints + mountainPoints;
     document.querySelector(".silos").innerHTML = silosPoints;
     finalScore.innerHTML = totalPoints;
     document.querySelector(".richCountry").innerHTML = pointsFor5Types;
@@ -898,7 +902,6 @@ let restartBtn = document.querySelector(".restart");
 restartBtn.addEventListener("click", () => {
   location.reload();
 });
-
 
 // Row with at least the 5 different terrain types
 function checkRowWith5Types() {
@@ -959,15 +962,15 @@ function calculatePointsFor5Types() {
   return points;
 }
 
-// Odd Numbered Silos 
+// Odd Numbered Silos
 // points for each odd numbered full column
 function checkOddNumberedSilo() {
   let colCount = 0;
   let rows = 11;
   let cols = 11;
-  
-  for(let col=0;col < cols; col += 2) {
-    if(checkColFull(col)) {
+
+  for (let col = 0; col < cols; col += 2) {
+    if (checkColFull(col)) {
       colCount++;
     }
   }
@@ -980,4 +983,49 @@ function calculatePointsForOddNumberedSilo() {
   let colCount = checkOddNumberedSilo();
   let points = colCount * 10;
   return points;
+}
+// Count the number of mountains on the map sorrounded on all the sides with any other terrain type
+
+function checkMountainSurrounded() {
+  let mountainCount = 0;
+  let rows = 11;
+  let cols = 11;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      let cell = document.querySelector(
+        `.row:nth-child(${row + 1}) .cell:nth-child(${col + 1})`
+      );
+
+      if (
+        cell.style.backgroundImage === `url("./assets/tiles/mountain_tile.png")`
+      ) {
+        let adjacentCells = getAdjacentCells(row, col);
+
+        let isSurrounded = true;
+
+        adjacentCells.forEach((adjacentCell) => {
+          if (
+            adjacentCell.row >= 0 &&
+            adjacentCell.col >= 0 &&
+            adjacentCell.row < rows &&
+            adjacentCell.col < cols
+          ) {
+            let mapCellIndex = adjacentCell.row * 11 + adjacentCell.col;
+            let cell = mapCells.item(mapCellIndex);
+
+            if (cell.style.backgroundImage === "") {
+              isSurrounded = false;
+            }
+          }
+        });
+
+        if (isSurrounded) {
+          mountainCount++;
+        }
+      }
+    }
+  }
+
+  return mountainCount;
 }
