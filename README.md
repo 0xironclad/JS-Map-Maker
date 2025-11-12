@@ -9,11 +9,34 @@ Quick note: running the game is just opening index.html in the browser (double-c
   - Example: Python 3: `python -m http.server 8000` then open `http://localhost:8000/`
 
 ## Features
-- [x] Single-file web app (index.html + script.js + style.css)
-- [x] Core "hot potato" gameplay loop
-- [x] Play/pause and game over states
-- [x] Basic responsive UI layout
-- [x] Local assets bundled in `assets/` (also provided as `assets.7z`)
+
+### 🧩 Core Gameplay
+- 🗺️ **11×11 Square Grid:** The game starts with a correctly drawn 11×11 map, including mountains in their proper locations. 
+- 🎲 **Random Placement:** A random map element is displayed each turn, showing its associated time cost. 
+- 🧱 **Tile Placement:** Players can place map elements anywhere on the grid following placement rules. 
+- ⏱️ **Time System:** The game lasts 28 time units. Each placed element reduces the remaining time by its time cost. 
+- 🏔️ **Mission — Borderlands:** Implements and calculates the Borderlands mission score correctly. 
+- 🧮 **End-of-Game Scoring:** After 28 time units, the final score for the Borderlands mission is calculated and displayed. 
+
+---
+
+### 🌿 Normal Mode Features
+- 🔄 **Rotation and Mirroring:** Each displayed map element can be rotated and mirrored before placement. 
+- 🌳 **Additional Missions:** Includes and scores *Edge of the Forest*, *Sleepy Valley*, and *Watering Potatoes* missions. 
+- 🍂 **Seasons:** The game spans four seasons, each lasting seven time units, with the active missions highlighted per season. 
+- 📆 **Seasonal Scoring:** At the end of each season, scores are computed based on active missions before moving to the next season. 
+- ⛰️ **Mountain Bonus:** +1 point is awarded for each fully surrounded mountain at the end of every season. 
+- 🏁 **Final Score:** Displays the total score accumulated over all four seasons. 
+- 🎨 **Visual Design:** Clean, well-structured, and visually appealing layout.
+
+---
+
+### ✨ Extra Missions Implemented
+- 🪄 **Magicians’ Valley** 
+- 🏗️ **Empty Site** 
+- 🌾 **Odd Silos** 
+- 💰 **Rich Countryside**
+
 
 
 ## Controls
