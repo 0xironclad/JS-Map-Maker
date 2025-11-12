@@ -48,7 +48,7 @@ Quick note: running the game is just opening index.html in the browser (double-c
 - index.html — game markup and asset references
 - script.js — main game logic, input handling and animation/game loop
 - style.css — styles and responsive layout
-- assets/ — images, audio (also provided as `assets.7z`)
+- assets/ — images
 
 If you want to inspect behavior, open script.js — game state, input handlers and rendering loop are all in that file.
 
@@ -65,3 +65,4 @@ If you want to inspect behavior, open script.js — game state, input handlers a
 
 ## Author
 0xironclad — https://github.com/0xironclad
+
