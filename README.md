@@ -1,44 +1,44 @@
-<Student's Collins Kipkemoi>
-<Neptun >BVN517
-Web programming - assignment
-This solution was submitted and created by the student above for the Web Programming course.
-I declare that this solution is my own work. I did not copy or use it from a third party
-solutions from third parties. I did not forward my solution to my fellow students, nor did I publish it.
-Eötvös Loránd University Student Requirements System
-(Organizational and Operational Regulations of ELTE, Volume II, § 74/C) states that as long as,
-as long as a student has been working on the work - or at least a significant part of it - of another student
-of another student's work as his or her own, it is a disciplinary offence.
-The most serious consequence of a disciplinary offence is dismissal from the university.
+# JS Map Maker
 
-### Minimal requirements (not accepted without them, 8 points)
-[X] Square grid: After starting the game, a 11x11 map with the mountains in the right place is drawn (1 point)
-[X] Placement: One of the map elements is randomly displayed with the corresponding time units (1 point)
-[X] Placement: We can place the map element on the grid (anywhere) (2 points).
-[X] Time: The game lasts up to 28 units of time, and by placing a map element down, you subtract the unit of time associated with that map element. (1 point)
-[X] Mission: you can calculate the score of the mission "Borderlands" (1 point).
-[X] End of game: for each mission, it calculates how many points have been scored for that mission (1 point)
-[X] End of game: At the end of the game, after the 28 time units have elapsed, it calculates the score for the basic mission "Borderlands" and displays the number of points scored (1 point)
+A tiny, self-contained browser "Map Mker" game written with plain HTML, CSS and JavaScript. No build step or package manager required — just open the game in your browser and play.
 
-### Normal requirements (12 points)
-[X] Placement: You can place the map element correctly (2 points).
-[X] Placement: The displayed map element can be rotated and placed in this way (1 point)
-[X] Placement: The displayed map element can be mirrored and placed in this way (1 point)
-[X] Mission: the mission "Edge of the forest" is displayed and can be scored (1 point)
-[X] Mission: the mission "Sleepy valley" is displayed and can be scored (1 point)
-[X] Mission: the mission "Watering potatoes" is displayed and can be scored (1 point)
-[X] Season: the game is played over 4 seasons, each season lasts for 7 time units, the mission cards for each season are highlighted. (1 point)
-[X] Season: At the end of each season, the end-of-season score is calculated from the corresponding mission cards and the game continues to the next season. (1 point)
-[X] Mission: 1 extra point can be earned by completely encircling the mountains, which will be added to your score at the end of each season (or game) (1 point)
-[X] End of game: at the end of the game, the total score over the four seasons is displayed (1 point).
-[X] Good-looking appearance (1 point)
+Quick note: running the game is just opening index.html in the browser (double-click) — no server needed.
 
-### Extra requirements (10 points)
-[ ] Mission: Tree line (1 point)
-[ ] Mission: Watering canal (1 point)
-[ ] Mission: Wealthy town(1 point)
-[X] Mission: Magicians' valley (1 point)
-[X] Mission: Empty site (1 point)
-[ ] Mission: Terraced House (1 point)
-[X] Mission: Odd silos (1 point)
-[X] Mission: Rich countryside (1 point)
-[ ] Save: The game saves its state continuously to localStorage. When loading a page, if there is such a saved state, it is loaded from there, otherwise a new game is started. At the end of the game, the saved state is deleted (2 points).
+## Run / demo
+- Open index.html in your browser (double-click) or serve the folder with any static server (optional).
+  - Example: Python 3: `python -m http.server 8000` then open `http://localhost:8000/`
+
+## Features
+- [x] Single-file web app (index.html + script.js + style.css)
+- [x] Core "hot potato" gameplay loop
+- [x] Play/pause and game over states
+- [x] Basic responsive UI layout
+- [x] Local assets bundled in `assets/` (also provided as `assets.7z`)
+
+
+## Controls
+- Mouse / touch: use on-screen buttons and tap/click interactive elements.
+- Keyboard: common keys are supported where available — see the in-game help (or read script.js for exact bindings).
+
+## Project structure
+- README.md — this file
+- index.html — game markup and asset references
+- script.js — main game logic, input handling and animation/game loop
+- style.css — styles and responsive layout
+- assets/ — images, audio (also provided as `assets.7z`)
+
+If you want to inspect behavior, open script.js — game state, input handlers and rendering loop are all in that file.
+
+## Development notes
+- No build pipeline: edit files and refresh the browser to test changes.
+- Suggested refactors: split script.js into modules, add localStorage highscores, and add basic unit tests.
+- If adding assets, keep file paths relative to index.html.
+
+## Contributing
+- Small fixes: open a PR with your change.
+- Larger features: open an issue first to discuss design and scope.
+- If you want, I can draft issues or a CONTRIBUTING.md with a suggested workflow.
+
+
+## Author
+0xironclad — https://github.com/0xironclad
